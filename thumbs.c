@@ -511,16 +511,31 @@ void tns_mark(tns_t *tns, int n, bool mark)
 	if (n >= 0 && n < *tns->cnt && tns->thumbs[n].im != NULL) {
 		win_t *win = tns->win;
 		thumb_t *t = &tns->thumbs[n];
-		unsigned long col = win->win_bg.pixel;
-		int x = t->x + t->w, y = t->y + t->h;
+		int border = MAX(tns->bw, 2);
 
-		win_draw_rect(win, x - 1, y + 1, 1, tns->bw, true, 1, col);
-		win_draw_rect(win, x + 1, y - 1, tns->bw, 1, true, 1, col);
+		if (!mark) {
+			imlib_context_set_image(t->im);
+			imlib_render_image_on_drawable_at_size(t->x, t->y, t->w, t->h);
+		} else {
+			unsigned long col = win->mrk_fg.pixel;
+			int inset = border;
+			int x1 = t->x + inset;
+			int y1 = t->y + inset;
+			int x2 = t->x + t->w - inset - 1;
+			int y2 = t->y + t->h - inset - 1;
 
-		if (mark)
-			col = win->mrk_fg.pixel;
+			/* draw a heavy border inside the thumbnail */
+			win_draw_rect(win, t->x, t->y, t->w, border, true, 1, col);
+			win_draw_rect(win, t->x, t->y + t->h - border, t->w, border, true, 1, col);
+			win_draw_rect(win, t->x, t->y, border, t->h, true, 1, col);
+			win_draw_rect(win, t->x + t->w - border, t->y, border, t->h, true, 1, col);
 
-		win_draw_rect(win, x, y, tns->bw + 2, tns->bw + 2, true, 1, col);
+			/* overlay an X to make the mark very visible */
+			if (x2 >= x1 && y2 >= y1) {
+				win_draw_line(win, x1, y1, x2, y2, border, col);
+				win_draw_line(win, x1, y2, x2, y1, border, col);
+			}
+		}
 
 		if (!mark && n == *tns->sel)
 			tns_highlight(tns, n, true);

@@ -536,6 +536,17 @@ void win_draw_rect(win_t *win, int x, int y, int w, int h, bool fill, int lw,
 		XDrawRectangle(win->env.dpy, win->buf.pm, gc, x, y, w, h);
 }
 
+void win_draw_line(win_t *win, int x1, int y1, int x2, int y2, int lw,
+                   unsigned long col)
+{
+	XGCValues gcval;
+
+	gcval.line_width = lw;
+	gcval.foreground = col;
+	XChangeGC(win->env.dpy, gc, GCForeground | GCLineWidth, &gcval);
+	XDrawLine(win->env.dpy, win->buf.pm, gc, x1, y1, x2, y2);
+}
+
 void win_set_title(win_t *win, const char *title, size_t len)
 {
 	int i, targets[] = { ATOM_WM_NAME, ATOM_WM_ICON_NAME, ATOM__NET_WM_NAME, ATOM__NET_WM_ICON_NAME };
