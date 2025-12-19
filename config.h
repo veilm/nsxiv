@@ -19,6 +19,7 @@ static const char *BAR_FONT[] = { "Nsxiv.bar.font",            "monospace-8" };
 static const bool TOP_STATUSBAR = false;
 #endif /* HAVE_LIBFONTS */
 
+
 #endif
 #ifdef INCLUDE_IMAGE_CONFIG
 
@@ -57,18 +58,9 @@ static const int CACHE_SIZE_MEM_PERCENTAGE = 3;          /* use 3% of total memo
 static const int CACHE_SIZE_LIMIT = 256 * 1024 * 1024;   /* but not above 256MiB */
 static const int CACHE_SIZE_FALLBACK = 32 * 1024 * 1024; /* fallback to 32MiB if we can't determine total memory */
 
+
 #endif
 #ifdef INCLUDE_OPTIONS_CONFIG
-
-/* if false, pixelate images at zoom level != 100%,
- * toggled with 'a' key binding (overwritten via `--anti-alias` option)
- */
-static const bool ANTI_ALIAS = true;
-
-/* if true, use a checkerboard background for alpha layer,
- * toggled with 'A' key binding (overwritten via `--alpha-layer` option)
- */
-static const bool ALPHA_LAYER = false;
 
 /* list of whitelisted/blacklisted directory for thumbnail cache
  * (overwritten via --cache-{allow,deny} option).
@@ -78,11 +70,21 @@ static const char TNS_FILTERS[] = "";
 /* set to true to treat `TNS_FILTERS` as a blacklist instead */
 static const bool TNS_FILTERS_IS_BLACKLIST = false;
 
+/* if false, pixelate images at zoom level != 100%,
+ * toggled with 'a' key binding (overwritten via `--anti-alias` option)
+ */
+static const bool ANTI_ALIAS = true;
+
+/* if true, use a checkerboard background for alpha layer,
+ * toggled with 'A' key binding
+ */
+static const bool ALPHA_LAYER = false;
+
 #endif
 #ifdef INCLUDE_THUMBS_CONFIG
 
 /* thumbnail sizes in pixels (width == height): */
-static const int thumb_sizes[] = { 32, 64, 96, 128, 160 };
+static const int thumb_sizes[] = { 32, 64, 96, 128, 160, 192, 224, 256 };
 
 /* thumbnail size at startup, index into thumb_sizes[]: */
 static const int THUMB_SIZE = 3;
@@ -99,8 +101,14 @@ static const KeySym KEYHANDLER_ABORT = XK_Escape;
 /* keyboard mappings for image and thumbnail mode: */
 static const keymap_t keys[] = {
 	/* modifiers    key               function              argument */
+    { 0,            XK_K,             g_zoom,               +1 },
+    { 0,            XK_J,             g_zoom,               -1 },
+    { Mod1Mask,     XK_h,             i_scroll_to_edge,     DIR_LEFT },
+    { Mod1Mask,     XK_j,             i_scroll_to_edge,     DIR_DOWN },
+    { Mod1Mask,     XK_k,             i_scroll_to_edge,     DIR_UP },
+    { Mod1Mask,     XK_l,             i_scroll_to_edge,     DIR_RIGHT },
+
 	{ 0,            XK_q,             g_quit,               0 },
-	{ 0,            XK_Q,             g_pick_quit,          0 },
 	{ 0,            XK_Return,        g_switch_mode,        None },
 	{ 0,            XK_f,             g_toggle_fullscreen,  None },
 	{ 0,            XK_b,             g_toggle_bar,         None },
@@ -146,10 +154,8 @@ static const keymap_t keys[] = {
 	{ 0,            XK_R,             t_reload_all,         None },
 
 	{ 0,            XK_n,             i_navigate,           +1 },
-	{ 0,            XK_n,             i_scroll_to_edge,     DIR_LEFT | DIR_UP },
 	{ 0,            XK_space,         i_navigate,           +1 },
 	{ 0,            XK_p,             i_navigate,           -1 },
-	{ 0,            XK_p,             i_scroll_to_edge,     DIR_LEFT | DIR_UP },
 	{ 0,            XK_BackSpace,     i_navigate,           -1 },
 	{ 0,            XK_bracketright,  i_navigate,           +10 },
 	{ 0,            XK_bracketleft,   i_navigate,           -10 },
@@ -166,10 +172,6 @@ static const keymap_t keys[] = {
 	{ 0,            XK_Up,            i_scroll,             DIR_UP },
 	{ 0,            XK_l,             i_scroll,             DIR_RIGHT },
 	{ 0,            XK_Right,         i_scroll,             DIR_RIGHT },
-	{ 0,            XK_H,             i_scroll_to_edge,     DIR_LEFT },
-	{ 0,            XK_J,             i_scroll_to_edge,     DIR_DOWN },
-	{ 0,            XK_K,             i_scroll_to_edge,     DIR_UP },
-	{ 0,            XK_L,             i_scroll_to_edge,     DIR_RIGHT },
 	{ 0,            XK_z,             i_scroll_to_center,   None },
 	{ 0,            XK_equal,         i_set_zoom,           100 },
 	{ 0,            XK_w,             i_fit_to_win,         SCALE_DOWN },
