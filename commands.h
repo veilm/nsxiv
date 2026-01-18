@@ -19,6 +19,7 @@ bool cg_reverse_marks(arg_t);
 bool cg_scroll_screen(arg_t);
 bool cg_switch_mode(arg_t);
 bool cg_toggle_bar(arg_t);
+bool cg_toggle_bg(arg_t);
 bool cg_toggle_fullscreen(arg_t);
 bool cg_toggle_image_mark(arg_t);
 bool cg_unmark_all(arg_t);
@@ -65,6 +66,7 @@ bool ct_select(arg_t);
 #define g_scroll_screen { cg_scroll_screen, MODE_ALL }
 #define g_switch_mode { cg_switch_mode, MODE_ALL }
 #define g_toggle_bar { cg_toggle_bar, MODE_ALL }
+#define g_toggle_bg { cg_toggle_bg, MODE_ALL }
 #define g_toggle_fullscreen { cg_toggle_fullscreen, MODE_ALL }
 #define g_toggle_image_mark { cg_toggle_image_mark, MODE_ALL }
 #define g_unmark_all { cg_unmark_all, MODE_ALL }

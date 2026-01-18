@@ -408,8 +408,11 @@ struct win {
 	win_env_t env;
 
 	XColor win_bg;
+	XColor win_bg_default;
+	XColor win_bg_alt;
 	XColor win_fg;
 	XColor mrk_fg;
+	bool win_bg_use_alt;
 #if HAVE_LIBFONTS
 	XftColor bar_bg;
 	XftColor bar_fg;
@@ -443,6 +446,7 @@ CLEANUP void win_close(win_t*);
 bool win_configure(win_t*, XConfigureEvent*);
 void win_toggle_fullscreen(win_t*);
 void win_toggle_bar(win_t*);
+void win_toggle_bg(win_t*);
 void win_clear(win_t*);
 void win_draw(win_t*);
 void win_draw_rect(win_t*, int, int, int, int, bool, int, unsigned long);

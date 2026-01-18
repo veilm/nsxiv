@@ -112,6 +112,16 @@ bool cg_toggle_bar(arg_t _)
 	return true;
 }
 
+bool cg_toggle_bg(arg_t _)
+{
+	win_toggle_bg(&win);
+	if (mode == MODE_IMAGE)
+		img.dirty = true;
+	else
+		tns.dirty = true;
+	return true;
+}
+
 bool cg_prefix_external(arg_t _)
 {
 	handle_key_handler(true);

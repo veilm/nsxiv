@@ -114,6 +114,11 @@ static const char *win_res(XrmDatabase db, const char *name, const char *def)
 	}
 }
 
+static bool win_bg_is_white(const XColor *col)
+{
+	return col->red == 0xFFFF && col->green == 0xFFFF && col->blue == 0xFFFF;
+}
+
 void win_init(win_t *win)
 {
 	win_env_t *e;
@@ -150,6 +155,10 @@ void win_init(win_t *win)
 	win_fg = win_res(db, WIN_FG[0], WIN_FG[1] ? WIN_FG[1] : "black");
 	mrk_fg = win_res(db, MARK_FG[0], MARK_FG[1] ? MARK_FG[1] : win_fg);
 	win_alloc_color(e, win_bg, &win->win_bg);
+	win->win_bg_default = win->win_bg;
+	win_alloc_color(e, win_bg_is_white(&win->win_bg) ? "black" : "white",
+	                &win->win_bg_alt);
+	win->win_bg_use_alt = false;
 	win_alloc_color(e, win_fg, &win->win_fg);
 	win_alloc_color(e, mrk_fg, &win->mrk_fg);
 
@@ -395,6 +404,12 @@ void win_toggle_bar(win_t *win)
 		win->bar.h = barheight;
 		win->h -= win->bar.h;
 	}
+}
+
+void win_toggle_bg(win_t *win)
+{
+	win->win_bg_use_alt = !win->win_bg_use_alt;
+	win->win_bg = win->win_bg_use_alt ? win->win_bg_alt : win->win_bg_default;
 }
 
 void win_clear(win_t *win)
